@@ -13,10 +13,13 @@
 
 // Define the maximum number of symbol tables
 #define MAX_SYMBOL_TABLES 100
-// Token structure declaration
 
+// Define the size of temp required in newTemp() function
+#define SIZE_OF_TEMP 30
+
+// A global variable to indicate that we are in a declaration, required in declareID function
 int isDeclaration;
-
+// Token structure declaration
 struct Token
 {
     char key[100];              // The name of the token
