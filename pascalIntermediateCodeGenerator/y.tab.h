@@ -185,7 +185,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 33 "parser.y"
+#line 34 "parser.y"
  int gen; struct listNode *symTabEntry;struct Attributes *attr;
 
 

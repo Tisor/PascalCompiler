@@ -28,6 +28,7 @@ int temp;
 void declareId(int type);
 void undeclaredID(token id);
 void checkFuncSign(token func);
+char* getRelop(int operation);
 %}
 
 %union { int gen; struct listNode *symTabEntry;struct Attributes *attr;}
@@ -98,8 +99,9 @@ void checkFuncSign(token func);
 %token 	<gen>VAR
 %token 	<gen>WHILE
 %token 	<gen>WITH
-%token  <gen>BOOL 
+%token  <gen>BOOL
 
+%type <gen>relop
 %type <symTabEntry> num 
 %type <symTabEntry> id 
 %type <gen> standard_type 
@@ -226,8 +228,8 @@ variable assignop expression {
 	}
 	$$ = (struct Attributes *)malloc(sizeof(struct Attributes));
 	strcpy($$->code,$3->code); // s.code = e.code
-	char buf[50];
-	sprintf(buf,"%s := %s\n",$1->data.key,$3->place);
+	char buf[100];
+	sprintf(buf,"%s = %s;\n",$1->data.key,$3->place);
 	strcat($$->code,buf);
 	printf("%s",$$->code);
 
@@ -338,10 +340,15 @@ simple_expression{
 		//$$ = (struct Attributes *)malloc(sizeof(struct Attributes));
 		$$ = $1;
 }
+
 | simple_expression relop simple_expression{
 	$$ = (struct Attributes* ) malloc(sizeof(struct Attributes));
 	$$->type = BOOL;
-	//generate relop code here
+    char buf[100];
+    // Relop will be replaced here
+	sprintf(buf,"%s %s %s;\n",$1->place,getRelop($2),$3->place);
+	strcat($$->code,buf);
+	printf("%s",$$->code);
 }
 ;
 
@@ -451,13 +458,14 @@ assignop: ASSIGNMENT
 id: IDENTIFIER { $$ = $1; /*bug: $$->data.type=-1;*/}
 ;
 
-relop: EQUAL
-| NOTEQUAL
-| LT
-| GT
-| LE
-| GE
-| IN
+relop:
+EQUAL {$$=EQUAL;}
+| NOTEQUAL {$$=NOTEQUAL;}
+| LT {$$=LT;}
+| GT {$$=GT;}
+| LE {$$=LE;}
+| GE {$$=GE;}
+| IN {$$=IN;}
 ;
 
 comma: COMMA
@@ -593,5 +601,19 @@ struct listNode* newTemp()
 	return entryPtr;
 }
 
+char* getRelop(int operation)
+{
+	switch (operation)
+	{
+		case EQUAL: return"==";
+		case NOTEQUAL: return"!=";
+		case LT: return"<";
+		case GT: return">";
+		case LE: return"<=";
+		case GE: return">=";
+		case IN: return"??";
+		default: printf("%d",operation);return ("relop");
+	}
+}
 
 
