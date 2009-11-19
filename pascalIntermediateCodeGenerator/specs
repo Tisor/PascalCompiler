@@ -1,0 +1,30 @@
+
+Hi
+I've added a few more to the list you've mentioned .
+
+> The additional semantic errors to check (compared with the previous
+> assignment) are:
+> 1. Check if the variable is declared before its use
+
+         Yep this is must and should
+>
+> 2. Type checking - the symbol table will contain an entry to store the
+> type of the variable
+
+        yes this is needed for all the type checking one does
+>
+> 3. Perform implicit casting (eg. int to real)
+
+        This is not required to implement .(I will confirm this with
+prof and let you know )
+
+   4) Type checking in cases like function arguments , operands of
+same type in any statement
+
+  5) Arrays :- Out of bounds  or index not being an integer
+
+   6) Possibly variable re-declaration
+
+These are the things which I can think of now. Additionally if prof
+wants some more cases to be handled , I'll let you know .
+
