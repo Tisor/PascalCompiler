@@ -28,7 +28,8 @@ int temp;
 void declareId(int type);
 void undeclaredID(token id);
 void checkFuncSign(token func);
-char* getRelop(int operation);
+char* getOperation(int operation);
+struct listNode* newTemp();
 %}
 
 %union { int gen; struct listNode *symTabEntry;struct Attributes *attr;}
@@ -102,6 +103,8 @@ char* getRelop(int operation);
 %token  <gen>BOOL
 
 %type <gen>relop
+%type <gen>mulop
+%type <gen>addop
 %type <symTabEntry> num 
 %type <symTabEntry> id 
 %type <gen> standard_type 
@@ -345,8 +348,9 @@ simple_expression{
 	$$ = (struct Attributes* ) malloc(sizeof(struct Attributes));
 	$$->type = BOOL;
     char buf[100];
-    // Relop will be replaced here
-	sprintf(buf,"%s %s %s;\n",$1->place,getRelop($2),$3->place);
+    ListNodePtr temp = newTemp();
+    strcpy($$->place, temp->data.key);
+	sprintf(buf,"%s = %s %s %s;\n",temp->data.key,$1->place,getOperation($2),$3->place);
 	strcat($$->code,buf);
 	printf("%s",$$->code);
 }
@@ -358,11 +362,20 @@ term {
 	$$ = $1;
 }
 | sign term {$$=$2;}
+// FIXME: look ^^ is that correct, independent of the sign?
+
 | simple_expression addop term {
 	if($1->type != $3->type) yyerror("Type error");
 	$$ =(struct Attributes *) malloc(sizeof(struct Attributes));
 	//generate code here
 	$$->type = $3->type;
+	char buf[100];
+    ListNodePtr temp = newTemp();
+    strcpy($$->place, temp->data.key);
+    // Addop will be replaced here
+	sprintf(buf,"%s = %s %s %s;\n",newTemp()->data.key,$1->place,getOperation($2),$3->place);
+	strcat($$->code,buf);
+	printf("%s",$$->code);	
 }
 ;
 
@@ -404,8 +417,10 @@ id
     $$->type = $1->data.type;
     
 }
+
 | id LPAREN expression_list semicolon 
 { 
+
     exprListTypeIndex = 0;	
     if ($1->data.type == -1)
     	undeclaredID($1->data);
@@ -419,7 +434,7 @@ id
 | num {
 	
 	$$ = (struct Attributes *)malloc(sizeof(struct Attributes));
-	//generate code here
+	//generate code here ??????
 	strcpy($$->place,$1->data.key);
 	$$->type = $1->data.type;
 	
@@ -439,17 +454,19 @@ PLUS
 | MINUS
 ;
 
-addop: PLUS
-| MINUS
-| OR
+addop: 
+  PLUS {$$ = PLUS;}
+| MINUS {$$ = MINUS;}
+| OR {$$ = OR;}
 | id {yyerror("Missing operator");}
 ;
 
-mulop: STAR
-| SLASH
-| DIV
-| MOD
-| AND
+mulop: 
+ STAR {$$ = STAR;}
+| SLASH {$$ = SLASH;}
+| DIV {$$ = DIV;}
+| MOD {$$ = MOD;}
+| AND {$$ = AND;}
 ;
 
 assignop: ASSIGNMENT
@@ -586,9 +603,9 @@ struct listNode* newTemp()
 {
 	static int ctr = 0;
 	char *varName = (char *)malloc(SIZE_OF_TEMP);
-	//this creates a new variable ti and increments i
-	sprintf(varName,"t%d",ctr++);
-	ListNodePtr *lookupToken = lookup(varName,currentST,0);
+	//this creates a new variable __ti and increments i
+	sprintf(varName,"__t%d",ctr++);
+	ListNodePtr lookupToken = lookup(varName,currentST,0);
 	if(lookupToken != NULL)
 	{
 		printf("ERROR, TERMINATING!!!\n");
@@ -601,7 +618,7 @@ struct listNode* newTemp()
 	return entryPtr;
 }
 
-char* getRelop(int operation)
+char* getOperation(int operation)
 {
 	switch (operation)
 	{
@@ -612,8 +629,17 @@ char* getRelop(int operation)
 		case LE: return"<=";
 		case GE: return">=";
 		case IN: return"??";
+		
+		case PLUS:return"+";
+		case MINUS:return"-";
+		case OR:return"|";
+		
+		case STAR:return"*";
+		case DIV:return"/";
+		case SLASH:return"\\";
+		case MOD:return"%";
+		case AND:return"&";
 		default: printf("%d",operation);return ("relop");
 	}
 }
-
 

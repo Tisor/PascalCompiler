@@ -99,11 +99,12 @@ int temp;
 void declareId(int type);
 void undeclaredID(token id);
 void checkFuncSign(token func);
-char* getRelop(int operation);
+char* getOperation(int operation);
+struct listNode* newTemp();
 
 
 /* Line 189 of yacc.c  */
-#line 107 "y.tab.c"
+#line 108 "y.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -276,12 +277,12 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 34 "parser.y"
+#line 35 "parser.y"
  int gen; struct listNode *symTabEntry;struct Attributes *attr;
 
 
 /* Line 214 of yacc.c  */
-#line 285 "y.tab.c"
+#line 286 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -293,7 +294,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 297 "y.tab.c"
+#line 298 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -619,16 +620,16 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,   123,   123,   124,   124,   125,   125,   128,   133,   134,
-     135,   138,   139,   140,   142,   142,   142,   143,   146,   147,
-     150,   151,   152,   155,   156,   159,   160,   160,   164,   164,
-     164,   178,   178,   178,   196,   197,   198,   202,   203,   207,
-     213,   214,   218,   219,   220,   224,   237,   238,   239,   240,
-     244,   250,   265,   281,   293,   304,   319,   333,   334,   335,
-     339,   344,   356,   360,   361,   370,   374,   384,   394,   407,
-     419,   427,   431,   438,   439,   442,   443,   444,   445,   448,
-     449,   450,   451,   452,   455,   458,   462,   463,   464,   465,
-     466,   467,   468,   471,   474,   477,   480,   483,   486,   487
+       0,   126,   126,   127,   127,   128,   128,   131,   136,   137,
+     138,   141,   142,   143,   145,   145,   145,   146,   149,   150,
+     153,   154,   155,   158,   159,   162,   163,   163,   167,   167,
+     167,   181,   181,   181,   199,   200,   201,   205,   206,   210,
+     216,   217,   221,   222,   223,   227,   240,   241,   242,   243,
+     247,   253,   268,   284,   296,   307,   322,   336,   337,   338,
+     342,   347,   361,   365,   368,   384,   388,   398,   408,   422,
+     435,   443,   447,   454,   455,   459,   460,   461,   462,   466,
+     467,   468,   469,   470,   473,   476,   480,   481,   482,   483,
+     484,   485,   486,   489,   492,   495,   498,   501,   504,   505
 };
 #endif
 
@@ -1654,147 +1655,147 @@ yyreduce:
         case 3:
 
 /* Line 1455 of yacc.c  */
-#line 124 "parser.y"
+#line 127 "parser.y"
     {yyerror("Error, missing matching paranthesis");}
     break;
 
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 125 "parser.y"
+#line 128 "parser.y"
     {yyerror("Error, missing matching paranthesis");}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 133 "parser.y"
+#line 136 "parser.y"
     {printf("Parsing Complete!\n");}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 134 "parser.y"
+#line 137 "parser.y"
     {yyerror("Error: . is missing");}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 135 "parser.y"
+#line 138 "parser.y"
     {yyerror("Expected . got ;");}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 138 "parser.y"
+#line 141 "parser.y"
     {symTabEntryList[symTabEntryListIndex++] = (yyvsp[(1) - (1)].symTabEntry);}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 139 "parser.y"
+#line 142 "parser.y"
     {symTabEntryList[symTabEntryListIndex++] = (yyvsp[(3) - (3)].symTabEntry);}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 140 "parser.y"
+#line 143 "parser.y"
     {yyerror("Warning, missing identifiers");}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 142 "parser.y"
+#line 145 "parser.y"
     {isDeclaration = 1;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 142 "parser.y"
+#line 145 "parser.y"
     {isDeclaration = 0;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 142 "parser.y"
+#line 145 "parser.y"
     {declareId((yyvsp[(7) - (8)].gen));}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 146 "parser.y"
+#line 149 "parser.y"
     {(yyval.gen) = (yyvsp[(1) - (1)].gen);}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 147 "parser.y"
+#line 150 "parser.y"
     {(yyval.gen) = (yyvsp[(8) - (8)].gen); isArray = 1;lowerBound = atoi((yyvsp[(3) - (8)].symTabEntry)->data.key);upperBound = atoi((yyvsp[(5) - (8)].symTabEntry)->data.key);}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 150 "parser.y"
+#line 153 "parser.y"
     {(yyval.gen)=INTEGER;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 151 "parser.y"
+#line 154 "parser.y"
     {(yyval.gen) = REAL;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 152 "parser.y"
+#line 155 "parser.y"
     {yyerror("Error, invalid type");}
     break;
 
   case 24:
 
 /* Line 1455 of yacc.c  */
-#line 156 "parser.y"
+#line 159 "parser.y"
     {currentST = 0;totalST++;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 160 "parser.y"
+#line 163 "parser.y"
     {yyerror("Missing semicolon");}
     break;
 
   case 28:
 
 /* Line 1455 of yacc.c  */
-#line 164 "parser.y"
+#line 167 "parser.y"
     {temp = currentST; currentST = 0;}
     break;
 
   case 29:
 
 /* Line 1455 of yacc.c  */
-#line 164 "parser.y"
+#line 167 "parser.y"
     {currentST = temp; temp = 0; currentST++;totalST++;}
     break;
 
   case 30:
 
 /* Line 1455 of yacc.c  */
-#line 165 "parser.y"
+#line 168 "parser.y"
     {
     (yyvsp[(3) - (7)].symTabEntry)->data.type = (yyvsp[(7) - (7)].gen);
     (yyvsp[(3) - (7)].symTabEntry)->data.isFunc = 1;
@@ -1813,21 +1814,21 @@ yyreduce:
   case 31:
 
 /* Line 1455 of yacc.c  */
-#line 178 "parser.y"
+#line 181 "parser.y"
     {temp = currentST; currentST = 0;}
     break;
 
   case 32:
 
 /* Line 1455 of yacc.c  */
-#line 178 "parser.y"
+#line 181 "parser.y"
     {currentST = temp; temp = 0; currentST++;totalST++;}
     break;
 
   case 33:
 
 /* Line 1455 of yacc.c  */
-#line 179 "parser.y"
+#line 182 "parser.y"
     {
 	//TODO need to decide, but it should not be -1
     (yyvsp[(3) - (5)].symTabEntry)->data.type = FUNCTION;	
@@ -1847,35 +1848,35 @@ yyreduce:
   case 35:
 
 /* Line 1455 of yacc.c  */
-#line 197 "parser.y"
+#line 200 "parser.y"
     {yyerror("Error, malformed/missing arguments");}
     break;
 
   case 36:
 
 /* Line 1455 of yacc.c  */
-#line 198 "parser.y"
+#line 201 "parser.y"
     {(yyval.gen)=-1;}
     break;
 
   case 37:
 
 /* Line 1455 of yacc.c  */
-#line 202 "parser.y"
+#line 205 "parser.y"
     {isFunction=1;declareId((yyvsp[(3) - (3)].gen));}
     break;
 
   case 38:
 
 /* Line 1455 of yacc.c  */
-#line 203 "parser.y"
+#line 206 "parser.y"
     {isFunction=1;declareId((yyvsp[(5) - (5)].gen));}
     break;
 
   case 45:
 
 /* Line 1455 of yacc.c  */
-#line 224 "parser.y"
+#line 227 "parser.y"
     {
 	if((yyvsp[(1) - (3)].symTabEntry)->data.type != (yyvsp[(3) - (3)].attr)->type)
 	{
@@ -1894,35 +1895,35 @@ yyreduce:
   case 46:
 
 /* Line 1455 of yacc.c  */
-#line 237 "parser.y"
+#line 240 "parser.y"
     {(yyval.attr) = NULL;}
     break;
 
   case 47:
 
 /* Line 1455 of yacc.c  */
-#line 238 "parser.y"
+#line 241 "parser.y"
     {(yyval.attr) = NULL;}
     break;
 
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 239 "parser.y"
+#line 242 "parser.y"
     {(yyval.attr) = NULL;}
     break;
 
   case 49:
 
 /* Line 1455 of yacc.c  */
-#line 240 "parser.y"
+#line 243 "parser.y"
     {(yyval.attr) = NULL;}
     break;
 
   case 50:
 
 /* Line 1455 of yacc.c  */
-#line 245 "parser.y"
+#line 248 "parser.y"
     { 
     if ((yyvsp[(1) - (1)].symTabEntry)->data.type == -1)
 	    undeclaredID((yyvsp[(1) - (1)].symTabEntry)->data);
@@ -1933,7 +1934,7 @@ yyreduce:
   case 51:
 
 /* Line 1455 of yacc.c  */
-#line 251 "parser.y"
+#line 254 "parser.y"
     { 
     
     /*	TODO: if possible check the bounds
@@ -1953,7 +1954,7 @@ yyreduce:
   case 52:
 
 /* Line 1455 of yacc.c  */
-#line 266 "parser.y"
+#line 269 "parser.y"
     {
     if((yyvsp[(3) - (4)].symTabEntry)->data.type != INTEGER)
     {
@@ -1973,7 +1974,7 @@ yyreduce:
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 282 "parser.y"
+#line 285 "parser.y"
     { 
     if ((yyvsp[(1) - (4)].symTabEntry)->data.type == -1)
     	undeclaredID((yyvsp[(1) - (4)].symTabEntry)->data);
@@ -1987,7 +1988,7 @@ yyreduce:
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 294 "parser.y"
+#line 297 "parser.y"
     { 
     //TODO: check the function signature
     checkFuncSign((yyvsp[(1) - (1)].symTabEntry)->data);
@@ -2003,7 +2004,7 @@ yyreduce:
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 305 "parser.y"
+#line 308 "parser.y"
     {
     ///exprListTypeIndex = 0;	
     //TODO: check the function signature
@@ -2023,7 +2024,7 @@ yyreduce:
   case 56:
 
 /* Line 1455 of yacc.c  */
-#line 320 "parser.y"
+#line 323 "parser.y"
     { 
     exprListTypeIndex = 0;	
     if ((yyvsp[(1) - (4)].symTabEntry)->data.isFunc == -1)
@@ -2039,28 +2040,28 @@ yyreduce:
   case 57:
 
 /* Line 1455 of yacc.c  */
-#line 333 "parser.y"
+#line 336 "parser.y"
     {exprListType[exprListTypeIndex++]=(yyvsp[(1) - (1)].attr)->type;}
     break;
 
   case 58:
 
 /* Line 1455 of yacc.c  */
-#line 334 "parser.y"
+#line 337 "parser.y"
     {exprListType[exprListTypeIndex++]=(yyvsp[(3) - (3)].attr)->type;}
     break;
 
   case 59:
 
 /* Line 1455 of yacc.c  */
-#line 335 "parser.y"
+#line 338 "parser.y"
     {yyerror("Warning, empty expression");}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 339 "parser.y"
+#line 342 "parser.y"
     {
 		//$$ = (struct Attributes *)malloc(sizeof(struct Attributes));
 		(yyval.attr) = (yyvsp[(1) - (1)].attr);
@@ -2070,13 +2071,15 @@ yyreduce:
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 344 "parser.y"
+#line 347 "parser.y"
     {
 	(yyval.attr) = (struct Attributes* ) malloc(sizeof(struct Attributes));
 	(yyval.attr)->type = BOOL;
     char buf[100];
+    ListNodePtr temp = newTemp();
+    strcpy((yyval.attr)->place, temp->data.key);
     // Relop will be replaced here
-	sprintf(buf,"%s %s %s;\n",(yyvsp[(1) - (3)].attr)->place,getRelop((yyvsp[(2) - (3)].gen)),(yyvsp[(3) - (3)].attr)->place);
+	sprintf(buf,"%s = %s %s %s;\n",temp->data.key,(yyvsp[(1) - (3)].attr)->place,getOperation((yyvsp[(2) - (3)].gen)),(yyvsp[(3) - (3)].attr)->place);
 	strcat((yyval.attr)->code,buf);
 	printf("%s",(yyval.attr)->code);
 }
@@ -2085,7 +2088,7 @@ yyreduce:
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 356 "parser.y"
+#line 361 "parser.y"
     {
 	//$$ = (struct Attributes *)malloc(sizeof(struct Attributes));
 	(yyval.attr) = (yyvsp[(1) - (1)].attr);
@@ -2095,26 +2098,33 @@ yyreduce:
   case 63:
 
 /* Line 1455 of yacc.c  */
-#line 360 "parser.y"
+#line 365 "parser.y"
     {(yyval.attr)=(yyvsp[(2) - (2)].attr);}
     break;
 
   case 64:
 
 /* Line 1455 of yacc.c  */
-#line 361 "parser.y"
+#line 368 "parser.y"
     {
 	if((yyvsp[(1) - (3)].attr)->type != (yyvsp[(3) - (3)].attr)->type) yyerror("Type error");
 	(yyval.attr) =(struct Attributes *) malloc(sizeof(struct Attributes));
 	//generate code here
 	(yyval.attr)->type = (yyvsp[(3) - (3)].attr)->type;
+	char buf[100];
+    ListNodePtr temp = newTemp();
+    strcpy((yyval.attr)->place, temp->data.key);
+    // Addop will be replaced here
+	sprintf(buf,"%s = %s %s %s;\n",newTemp()->data.key,(yyvsp[(1) - (3)].attr)->place,getOperation((yyvsp[(2) - (3)].gen)),(yyvsp[(3) - (3)].attr)->place);
+	strcat((yyval.attr)->code,buf);
+	printf("%s",(yyval.attr)->code);	
 }
     break;
 
   case 65:
 
 /* Line 1455 of yacc.c  */
-#line 370 "parser.y"
+#line 384 "parser.y"
     {
 	//$$ = (struct Attributes *)malloc(sizeof(struct Attributes *));
 	(yyval.attr) = (yyvsp[(1) - (1)].attr);
@@ -2124,7 +2134,7 @@ yyreduce:
   case 66:
 
 /* Line 1455 of yacc.c  */
-#line 374 "parser.y"
+#line 388 "parser.y"
     {
 	if((yyvsp[(1) - (3)].attr)->type!=(yyvsp[(3) - (3)].attr)->type)
 		yyerror("Type error");
@@ -2137,7 +2147,7 @@ yyreduce:
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 385 "parser.y"
+#line 399 "parser.y"
     { 
     if ((yyvsp[(1) - (1)].symTabEntry)->data.type == -1)
     	undeclaredID((yyvsp[(1) - (1)].symTabEntry)->data);
@@ -2152,7 +2162,7 @@ yyreduce:
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 395 "parser.y"
+#line 409 "parser.y"
     {
     //exprListTypeIndex = 0;	
     //TODO: check the function signature
@@ -2170,8 +2180,9 @@ yyreduce:
   case 69:
 
 /* Line 1455 of yacc.c  */
-#line 408 "parser.y"
+#line 423 "parser.y"
     { 
+
     exprListTypeIndex = 0;	
     if ((yyvsp[(1) - (4)].symTabEntry)->data.type == -1)
     	undeclaredID((yyvsp[(1) - (4)].symTabEntry)->data);
@@ -2187,11 +2198,11 @@ yyreduce:
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 419 "parser.y"
+#line 435 "parser.y"
     {
 	
 	(yyval.attr) = (struct Attributes *)malloc(sizeof(struct Attributes));
-	//generate code here
+	//generate code here ??????
 	strcpy((yyval.attr)->place,(yyvsp[(1) - (1)].symTabEntry)->data.key);
 	(yyval.attr)->type = (yyvsp[(1) - (1)].symTabEntry)->data.type;
 	
@@ -2201,7 +2212,7 @@ yyreduce:
   case 71:
 
 /* Line 1455 of yacc.c  */
-#line 427 "parser.y"
+#line 443 "parser.y"
     {
 		(yyval.attr) = (struct Attributes *)malloc(sizeof(struct Attributes));
 		*(yyval.attr) = *(yyvsp[(2) - (3)].attr);
@@ -2211,94 +2222,150 @@ yyreduce:
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 431 "parser.y"
+#line 447 "parser.y"
     {
 		(yyval.attr) = (struct Attributes *)malloc(sizeof(struct Attributes));
 		*(yyval.attr) = *(yyvsp[(2) - (2)].attr);
 }
     break;
 
+  case 75:
+
+/* Line 1455 of yacc.c  */
+#line 459 "parser.y"
+    {(yyval.gen) = PLUS;}
+    break;
+
+  case 76:
+
+/* Line 1455 of yacc.c  */
+#line 460 "parser.y"
+    {(yyval.gen) = MINUS;}
+    break;
+
+  case 77:
+
+/* Line 1455 of yacc.c  */
+#line 461 "parser.y"
+    {(yyval.gen) = OR;}
+    break;
+
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 445 "parser.y"
+#line 462 "parser.y"
     {yyerror("Missing operator");}
+    break;
+
+  case 79:
+
+/* Line 1455 of yacc.c  */
+#line 466 "parser.y"
+    {(yyval.gen) = STAR;}
+    break;
+
+  case 80:
+
+/* Line 1455 of yacc.c  */
+#line 467 "parser.y"
+    {(yyval.gen) = SLASH;}
+    break;
+
+  case 81:
+
+/* Line 1455 of yacc.c  */
+#line 468 "parser.y"
+    {(yyval.gen) = DIV;}
+    break;
+
+  case 82:
+
+/* Line 1455 of yacc.c  */
+#line 469 "parser.y"
+    {(yyval.gen) = MOD;}
+    break;
+
+  case 83:
+
+/* Line 1455 of yacc.c  */
+#line 470 "parser.y"
+    {(yyval.gen) = AND;}
     break;
 
   case 85:
 
 /* Line 1455 of yacc.c  */
-#line 458 "parser.y"
+#line 476 "parser.y"
     { (yyval.symTabEntry) = (yyvsp[(1) - (1)].symTabEntry); /*bug: $$->data.type=-1;*/}
     break;
 
   case 86:
 
 /* Line 1455 of yacc.c  */
-#line 462 "parser.y"
+#line 480 "parser.y"
     {(yyval.gen)=EQUAL;}
     break;
 
   case 87:
 
 /* Line 1455 of yacc.c  */
-#line 463 "parser.y"
+#line 481 "parser.y"
     {(yyval.gen)=NOTEQUAL;}
     break;
 
   case 88:
 
 /* Line 1455 of yacc.c  */
-#line 464 "parser.y"
+#line 482 "parser.y"
     {(yyval.gen)=LT;}
     break;
 
   case 89:
 
 /* Line 1455 of yacc.c  */
-#line 465 "parser.y"
+#line 483 "parser.y"
     {(yyval.gen)=GT;}
     break;
 
   case 90:
 
 /* Line 1455 of yacc.c  */
-#line 466 "parser.y"
+#line 484 "parser.y"
     {(yyval.gen)=LE;}
     break;
 
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 467 "parser.y"
+#line 485 "parser.y"
     {(yyval.gen)=GE;}
     break;
 
   case 92:
 
 /* Line 1455 of yacc.c  */
-#line 468 "parser.y"
+#line 486 "parser.y"
     {(yyval.gen)=IN;}
     break;
 
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 486 "parser.y"
+#line 504 "parser.y"
     {(yyval.symTabEntry)=(yyvsp[(1) - (1)].symTabEntry);}
     break;
 
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 487 "parser.y"
+#line 505 "parser.y"
     {(yyval.symTabEntry)=(yyvsp[(1) - (1)].symTabEntry);}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 2302 "y.tab.c"
+#line 2369 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2510,7 +2577,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 490 "parser.y"
+#line 508 "parser.y"
 
 // Declares an identifier
 void declareId(int type)
@@ -2610,9 +2677,9 @@ struct listNode* newTemp()
 {
 	static int ctr = 0;
 	char *varName = (char *)malloc(SIZE_OF_TEMP);
-	//this creates a new variable ti and increments i
-	sprintf(varName,"t%d",ctr++);
-	ListNodePtr *lookupToken = lookup(varName,currentST,0);
+	//this creates a new variable __ti and increments i
+	sprintf(varName,"__t%d",ctr++);
+	ListNodePtr lookupToken = lookup(varName,currentST,0);
 	if(lookupToken != NULL)
 	{
 		printf("ERROR, TERMINATING!!!\n");
@@ -2625,7 +2692,7 @@ struct listNode* newTemp()
 	return entryPtr;
 }
 
-char* getRelop(int operation)
+char* getOperation(int operation)
 {
 	switch (operation)
 	{
@@ -2636,9 +2703,18 @@ char* getRelop(int operation)
 		case LE: return"<=";
 		case GE: return">=";
 		case IN: return"??";
+		
+		case PLUS:return"+";
+		case MINUS:return"-";
+		case OR:return"|";
+		
+		case STAR:return"*";
+		case DIV:return"/";
+		case SLASH:return"\\";
+		case MOD:return"%";
+		case AND:return"&";
 		default: printf("%d",operation);return ("relop");
 	}
 }
-
 
 
