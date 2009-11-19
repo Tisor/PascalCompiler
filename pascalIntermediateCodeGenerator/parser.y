@@ -373,7 +373,7 @@ term {
     ListNodePtr temp = newTemp();
     strcpy($$->place, temp->data.key);
     // Addop will be replaced here
-	sprintf(buf,"%s = %s %s %s;\n",newTemp()->data.key,$1->place,getOperation($2),$3->place);
+	sprintf(buf,"%s = %s %s %s;\n",temp->data.key,$1->place,getOperation($2),$3->place);
 	strcat($$->code,buf);
 	printf("%s",$$->code);	
 }
