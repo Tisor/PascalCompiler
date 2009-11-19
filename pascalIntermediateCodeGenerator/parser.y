@@ -239,7 +239,8 @@ variable assignop expression {
 }
 | procedure_statement{$$ = NULL;} 
 | compound_statement {$$ = NULL;}
-| IF expression THEN statement ELSE statement {$$ = NULL;}
+| IF expression THEN statement ELSE statement{
+	$$ = (struct Attributes *)malloc(sizeof(struct Attributes));}
 | WHILE expression DO statement {$$ = NULL;}
 ;
 
@@ -352,7 +353,6 @@ simple_expression{
     strcpy($$->place, temp->data.key);
 	sprintf(buf,"%s = %s %s %s;\n",temp->data.key,$1->place,getOperation($2),$3->place);
 	strcat($$->code,buf);
-	printf("%s",$$->code);
 }
 ;
 
@@ -361,7 +361,7 @@ term {
 	//$$ = (struct Attributes *)malloc(sizeof(struct Attributes));
 	$$ = $1;
 }
-| sign term {$$=$2;}
+| sign term{$$=$2;}
 // FIXME: look ^^ is that correct, independent of the sign?
 
 | simple_expression addop term {
@@ -375,7 +375,6 @@ term {
     // Addop will be replaced here
 	sprintf(buf,"%s = %s %s %s;\n",temp->data.key,$1->place,getOperation($2),$3->place);
 	strcat($$->code,buf);
-	printf("%s",$$->code);	
 }
 ;
 
@@ -390,6 +389,13 @@ factor {
 	$$ = (struct Attributes *)malloc(sizeof(struct Attributes *));
 	//generate code here
 	$$->type = $3->type;
+	char buf[100];
+    ListNodePtr temp = newTemp();
+    strcpy($$->place, temp->data.key);
+    // Addop will be replaced here
+	sprintf(buf,"%s = %s %s %s;\n",temp->data.key,$1->place,getOperation($2),$3->place);
+	strcat($$->code,buf);
+	printf("%s",$$->code);	
 }
 ;
 
