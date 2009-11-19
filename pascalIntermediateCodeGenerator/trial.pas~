@@ -12,7 +12,7 @@ begin
     if b = 0 then gc:=a
     else gc := gcd(b, a mod b, 0, 0.0);
 
-    while b = 5 do a := 0
+    while b = 5 do a := 0;
 
 end;
 function adder(a,b:integer):integer;

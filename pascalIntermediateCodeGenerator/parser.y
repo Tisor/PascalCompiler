@@ -241,20 +241,35 @@ variable assignop expression {
 | compound_statement {$$ = NULL;}
 | IF expression THEN statement ELSE statement{
 	$$ = (struct Attributes *)malloc(sizeof(struct Attributes));
+	
+	// FIXME don't print, just concatanate to the code
 	printf("%s",$2->code);
 	printf("if(%s)\n",$2->place);
 	printf("goto %s\n", "Label1");
 	printf("else goto %s\n","Label2");		// Replace with genLabel()
 	printf("%s:\n", "Label1");
-	printf("%s\n", $4->code);
+	printf("%s", $4->code);
 	printf("goto %s\n", "Label3");
 	printf("%s:\n", "Label2");
-	printf("%s\n", $6->code);
+	printf("%s", $6->code);
 	printf("%s:\n", "Label3");
 }
-| WHILE expression DO statement {$$ = NULL;}
-;
 
+| WHILE expression DO statement {
+	$$ = (struct Attributes *)malloc(sizeof(struct Attributes));
+	
+	// FIXME don't print, just concatanate to the code
+	printf("%s:\n", "Label3");
+	printf("%s",$2->code);
+	printf("if(%s)\n",$2->place);
+	printf("goto %s\n", "Label1");
+	printf("else goto %s\n","Label2");		// Replace with genLabel()
+	printf("%s:\n", "Label1");
+	printf("%s", $4->code);
+	printf("goto %s\n", "Label3");
+	printf("%s:\n", "Label2");
+;
+}
 variable: 
 id  
 { 
