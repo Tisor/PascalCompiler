@@ -240,7 +240,18 @@ variable assignop expression {
 | procedure_statement{$$ = NULL;} 
 | compound_statement {$$ = NULL;}
 | IF expression THEN statement ELSE statement{
-	$$ = (struct Attributes *)malloc(sizeof(struct Attributes));}
+	$$ = (struct Attributes *)malloc(sizeof(struct Attributes));
+	printf("%s",$2->code);
+	printf("if(%s)\n",$2->place);
+	printf("goto %s\n", "Label1");
+	printf("else goto %s\n","Label2");		// Replace with genLabel()
+	printf("%s:", "Label1\n");
+	printf("%s\n", $4->code);
+	printf("goto %s\n", "Label3");
+	printf("%s:\n", "Label2");
+	printf("%s\n", $6->code);
+	printf("%s:\n", "Label3");
+}
 | WHILE expression DO statement {$$ = NULL;}
 ;
 
@@ -353,7 +364,6 @@ simple_expression{
     strcpy($$->place, temp->data.key);
 	sprintf(buf,"%s = %s %s %s;\n",temp->data.key,$1->place,getOperation($2),$3->place);
 	strcat($$->code,buf);
-	//printf("%s",$$->code);
 }
 ;
 
@@ -410,6 +420,7 @@ id
 	//generate code here
 	strcpy($$->place,$1->data.key);
     $$->type = $1->data.type;
+    strcpy($$->code, "");
 }
 | id LPAREN expression_list RPAREN 
 {
@@ -422,7 +433,7 @@ id
 	$$ = (struct Attributes *)malloc(sizeof(struct Attributes));
 	//generate code here
     $$->type = $1->data.type;
-    
+   
 }
 
 | id LPAREN expression_list semicolon 
@@ -444,6 +455,7 @@ id
 	//generate code here ??????
 	strcpy($$->place,$1->data.key);
 	$$->type = $1->data.type;
+    strcpy($$->code, "");
 	
 }
 | LPAREN expression RPAREN {
